@@ -201,19 +201,40 @@ function showResult() {
 }
 
 // ------------------------------------------------------------
-// ウェイトリスト登録(MVP段階のダミー実装)
-// 本番では Google Form / Tally / Mailchimp などのエンドポイントに置き換える
+// ウェイトリスト登録(Formspreeに送信)
+// https://formspree.io で無料アカウントを作り、フォームを1つ作成して
+// 発行されたエンドポイントURLを下の FORMSPREE_ENDPOINT に貼り替えてください。
+// 例: "https://formspree.io/f/abcdwxyz"
 // ------------------------------------------------------------
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xrenlrzo";
+
 const waitlistForm = document.getElementById("waitlist-form");
 const waitlistMsg = document.getElementById("waitlist-msg");
 
-waitlistForm.addEventListener("submit", (e) => {
+waitlistForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const email = document.getElementById("waitlist-email").value;
 
-  // TODO: 実際のフォーム送信先(Google Form / Tally / 独自API)に置き換える
-  console.log("waitlist signup:", email);
+  if (FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID")) {
+    waitlistMsg.textContent = "設定が未完了です(FORMSPREE_ENDPOINTを設定してください)";
+    return;
+  }
 
-  waitlistMsg.textContent = "登録ありがとうございます!リリース時にご連絡します。";
-  waitlistForm.reset();
+  const formData = new FormData(waitlistForm);
+
+  try {
+    const res = await fetch(FORMSPREE_ENDPOINT, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: formData,
+    });
+
+    if (res.ok) {
+      waitlistMsg.textContent = "登録ありがとうございます!リリース時にご連絡します。";
+      waitlistForm.reset();
+    } else {
+      waitlistMsg.textContent = "送信に失敗しました。時間をおいて再度お試しください。";
+    }
+  } catch (err) {
+    waitlistMsg.textContent = "通信エラーが発生しました。ネットワークをご確認ください。";
+  }
 });
