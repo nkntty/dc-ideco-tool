@@ -178,9 +178,11 @@ h1 {
 
 #waitlist-form {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 14px;
   max-width: 420px;
   margin: 24px auto 0;
+  text-align: left;
 }
 
 #waitlist-email {
@@ -191,6 +193,25 @@ h1 {
   background: var(--bg);
   color: var(--text);
   font-size: 0.95rem;
+  width: 100%;
+}
+
+.optional-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.optional-field input[type="month"] {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.9rem;
+  color-scheme: dark;
 }
 
 .msg {

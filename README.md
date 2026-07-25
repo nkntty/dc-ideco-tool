@@ -75,6 +75,37 @@ git push -u origin main
 5. **法人向け展開の布石**
    ある程度ユーザーが集まったら、退職者への案内義務がある企業(特に人事労務SaaSを使っている中小企業)向けに、同じ診断ロジックをコンプライアンスツールとして提供する展開も検討。
 
+## リマインド機能(Pythonスクリプト)
+
+`scripts/` フォルダに、登録者へのリマインドメールを送るための2本のスクリプトがあります。
+
+- `analyze_submissions.py` : Formspreeの登録データを集計し、リマインド対象者(転職・退職から5〜6ヶ月経過)を表示する
+- `send_reminders.py` : 対象者にGmail経由でリマインドメールを送信する(二重送信防止のログ付き)
+
+### セットアップ
+
+```bash
+cd scripts
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+```
+
+`.env` を開き、`GMAIL_ADDRESS` に自分のGmailアドレス、`GMAIL_APP_PASSWORD` にアプリパスワードを設定してください。アプリパスワードは、Googleアカウントで2段階認証を有効にした上で https://myaccount.google.com/apppasswords から発行できます(通常のGoogleパスワードとは別物です)。
+
+### 実行の流れ
+
+1. Formspreeダッシュボード → 対象フォーム → Submissions → CSVをエクスポートし、`scripts/submissions.csv` として保存する
+2. 集計だけ確認したい場合: `python3 analyze_submissions.py`
+3. リマインドメールを実際に送る場合: `python3 send_reminders.py`
+
+現時点では手動でCSVをダウンロードして実行する運用ですが、慣れてきたら GitHub Actions の scheduled workflow(`cron`)で `send_reminders.py` を毎日自動実行するように発展させられます(その場合、CSV取得部分をFormspreeの有料プランのAPI、またはGoogle Sheets連携に置き換える必要があります)。
+
+### 重要な注意
+
+`submissions.csv` と `reminded_log.csv` には登録者の個人のメールアドレスが含まれます。このリポジトリは公開GitHubリポジトリなので、**これらのファイルは絶対にcommit・pushしないでください**(`.gitignore` で既に除外設定済みですが、念のため `git status` で確認する習慣をつけてください)。
+
 ## 規制まわりの注意
 
 - このツールは制度・手続きに関する一般的な情報提供であり、特定の運用商品や銘柄を推奨するものではありません(投資助言業の登録が不要な範囲に留めています)。

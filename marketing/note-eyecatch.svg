@@ -1,0 +1,135 @@
+<svg viewBox="0 0 1280 670" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0b1220"/>
+    </radialGradient>
+    <linearGradient id="iceFill" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#7dd3fc" stop-opacity="0.32"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.18"/>
+    </linearGradient>
+    <radialGradient id="frostVignette" cx="50%" cy="50%" r="60%">
+      <stop offset="60%" stop-color="#e0f2fe" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.5"/>
+    </radialGradient>
+    <linearGradient id="coinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#67e8f9"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <clipPath id="iceClip">
+      <polygon points="635,168 706,188 758,222 792,275 800,340 786,405 758,450 715,492 655,512 592,508 535,485 495,445 465,392 458,335 472,278 505,222 555,190"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1280" height="670" fill="url(#bgGlow)"/>
+
+  <!-- faint grid dots -->
+  <g fill="#334155" opacity="0.35">
+    <circle cx="80" cy="80" r="2.5"/>
+    <circle cx="160" cy="80" r="2.5"/>
+    <circle cx="240" cy="80" r="2.5"/>
+    <circle cx="1040" cy="600" r="2.5"/>
+    <circle cx="1120" cy="600" r="2.5"/>
+    <circle cx="1200" cy="600" r="2.5"/>
+    <circle cx="1040" cy="80" r="2.5"/>
+    <circle cx="1120" cy="80" r="2.5"/>
+    <circle cx="80" cy="600" r="2.5"/>
+    <circle cx="160" cy="600" r="2.5"/>
+  </g>
+
+  <!-- glow behind ice block -->
+  <circle cx="640" cy="335" r="220" fill="#22d3ee" opacity="0.10" filter="url(#softGlow)"/>
+
+  <!-- coin stack (frozen inside) -->
+  <g>
+    <ellipse cx="640" cy="430" rx="95" ry="26" fill="url(#coinGrad)"/>
+    <rect x="545" y="404" width="190" height="26" fill="url(#coinGrad)"/>
+    <ellipse cx="640" cy="404" rx="95" ry="24" fill="#a5f3fc"/>
+
+    <ellipse cx="640" cy="382" rx="88" ry="24" fill="url(#coinGrad)"/>
+    <rect x="552" y="358" width="176" height="24" fill="url(#coinGrad)"/>
+    <ellipse cx="640" cy="358" rx="88" ry="22" fill="#a5f3fc"/>
+
+    <ellipse cx="640" cy="337" rx="80" ry="22" fill="url(#coinGrad)"/>
+    <rect x="560" y="315" width="160" height="22" fill="url(#coinGrad)"/>
+    <ellipse cx="640" cy="315" rx="80" ry="20" fill="#a5f3fc"/>
+
+    <text x="640" y="322" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#0e7490" text-anchor="middle">¥</text>
+  </g>
+
+  <!-- ice block encasing the coins (irregular chipped-ice outline) -->
+  <polygon points="635,168 706,188 758,222 792,275 800,340 786,405 758,450 715,492 655,512 592,508 535,485 495,445 465,392 458,335 472,278 505,222 555,190"
+           fill="url(#iceFill)" stroke="#bae6fd" stroke-width="3" stroke-opacity="0.7" stroke-linejoin="round"/>
+
+  <!-- frosted highlight overlay -->
+  <polygon points="555,190 505,222 472,278 490,300 560,240 620,205" fill="#f0f9ff" opacity="0.25"/>
+
+  <!-- small ice chips poking outward -->
+  <polygon points="706,188 730,168 726,196" fill="url(#iceFill)" stroke="#bae6fd" stroke-width="2" stroke-opacity="0.7"/>
+  <polygon points="800,340 828,332 812,362" fill="url(#iceFill)" stroke="#bae6fd" stroke-width="2" stroke-opacity="0.7"/>
+  <polygon points="592,508 578,536 610,524" fill="url(#iceFill)" stroke="#bae6fd" stroke-width="2" stroke-opacity="0.7"/>
+  <polygon points="465,392 434,398 448,368" fill="url(#iceFill)" stroke="#bae6fd" stroke-width="2" stroke-opacity="0.7"/>
+
+  <!-- crack lines (irregular, glassy) -->
+  <g stroke="#e0f2fe" stroke-opacity="0.55" stroke-width="1.75" fill="none" stroke-linecap="round">
+    <path d="M 635,168 L 655,250 L 615,300 L 660,360 L 630,430 L 655,512"/>
+    <path d="M 472,278 L 545,300 L 620,285 L 700,305 L 786,300"/>
+    <path d="M 615,300 L 560,330"/>
+    <path d="M 660,360 L 725,380"/>
+  </g>
+  <!-- subtle inner shading for depth -->
+  <polygon points="635,168 706,188 758,222 792,275 800,340 786,405 758,450 715,492 655,512 592,508 535,485 495,445 465,392 458,335 472,278 505,222 555,190"
+           fill="none" stroke="#0891b2" stroke-width="1" stroke-opacity="0.3"/>
+
+  <!-- frost vignette: frostier near the edges, clearer at center -->
+  <g clip-path="url(#iceClip)">
+    <rect x="450" y="160" width="360" height="360" fill="url(#frostVignette)"/>
+    <g fill="#f0f9ff" opacity="0.7">
+      <circle cx="500" cy="230" r="2"/>
+      <circle cx="520" cy="260" r="1.5"/>
+      <circle cx="760" cy="230" r="2"/>
+      <circle cx="770" cy="270" r="1.5"/>
+      <circle cx="490" cy="420" r="2"/>
+      <circle cx="510" cy="450" r="1.5"/>
+      <circle cx="750" cy="430" r="2"/>
+      <circle cx="730" cy="460" r="1.5"/>
+      <circle cx="640" cy="200" r="1.5"/>
+      <circle cx="640" cy="480" r="1.5"/>
+    </g>
+  </g>
+
+  <!-- pause icon, bottom-right of ice block -->
+  <g transform="translate(760,470)">
+    <circle r="34" fill="#0f172a" stroke="#fbbf24" stroke-width="3"/>
+    <rect x="-12" y="-14" width="8" height="28" rx="2" fill="#fbbf24"/>
+    <rect x="4" y="-14" width="8" height="28" rx="2" fill="#fbbf24"/>
+  </g>
+
+  <!-- calendar / deadline icon, upper-left -->
+  <g transform="translate(220,160)">
+    <rect x="-48" y="-40" width="96" height="96" rx="10" fill="#111827" stroke="#67e8f9" stroke-width="2.5"/>
+    <rect x="-48" y="-40" width="96" height="24" rx="10" fill="#0891b2"/>
+    <line x1="-25" y1="-52" x2="-25" y2="-32" stroke="#a5f3fc" stroke-width="4" stroke-linecap="round"/>
+    <line x1="25" y1="-52" x2="25" y2="-32" stroke="#a5f3fc" stroke-width="4" stroke-linecap="round"/>
+    <text x="0" y="20" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#f87171" text-anchor="middle">6</text>
+    <text x="0" y="45" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#94a3b8" text-anchor="middle">MONTHS</text>
+    <circle cx="36" cy="-40" r="7" fill="#f87171"/>
+  </g>
+
+  <!-- small snow accents -->
+  <g fill="#e0f2fe" opacity="0.6">
+    <circle cx="920" cy="200" r="3"/>
+    <circle cx="960" cy="240" r="2"/>
+    <circle cx="900" cy="150" r="2"/>
+    <circle cx="380" cy="470" r="3"/>
+    <circle cx="350" cy="510" r="2"/>
+  </g>
+</svg>
