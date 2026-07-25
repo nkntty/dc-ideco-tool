@@ -106,6 +106,27 @@ cp .env.example .env
 
 `submissions.csv` と `reminded_log.csv` には登録者の個人のメールアドレスが含まれます。このリポジトリは公開GitHubリポジトリなので、**これらのファイルは絶対にcommit・pushしないでください**(`.gitignore` で既に除外設定済みですが、念のため `git status` で確認する習慣をつけてください)。
 
+## AIチャット機能(OpenAI API + Vercel Python Function)
+
+診断結果画面に、AIに自由形式で質問できるチャットを追加しています。フロントエンド(`script.js`)から `/api/chat` を呼び出し、`api/chat.py`(Vercelのpython serverless function)がOpenAI APIを呼び出す構成です。**OpenAIのAPIキーはフロントエンドには一切書かず、Vercel Functionの中だけで使う**設計にしているので、キーが公開されることはありません。
+
+### セットアップ(Vercel側)
+
+1. Vercelのプロジェクトダッシュボード → 該当プロジェクト → **Settings** → **Environment Variables**
+2. Key: `OPENAI_API_KEY`、Value: 自分のOpenAI APIキーを入力
+3. Environmentは「Production」「Preview」「Development」全てにチェックして Save
+4. 保存後、Deployments タブから最新のデプロイを選び「Redeploy」する(環境変数は再デプロイしないと反映されません)
+
+### コストを守るための注意(重要)
+
+このチャットは誰でもアクセスできる公開ページから呼び出されるため、悪意のあるアクセスやbotに叩かれるとAPIクレジットを想定以上に消費するリスクがあります。残りクレジットが少ないうちは、必ず以下を設定してください。
+
+- OpenAIの管理画面(platform.openai.com)→ Settings → Billing → **Usage limits** で、月間の上限金額(ハードリミット)を必ず設定する
+- モデルは軽量な `gpt-4o-mini` を使用しており(`api/chat.py` 内の `MODEL` 変数)、1回あたりのコストは数銭〜十数銭程度に抑えられている
+- 1回の質問は300文字、回答は300トークンまでに制限済み(`api/chat.py` の `MAX_INPUT_CHARS` / `MAX_TOKENS`)
+
+利用が増えてきたら、reCAPTCHAや簡易的なレート制限(同一IPからの連続リクエスト制限)の追加も検討してください。
+
 ## 規制まわりの注意
 
 - このツールは制度・手続きに関する一般的な情報提供であり、特定の運用商品や銘柄を推奨するものではありません(投資助言業の登録が不要な範囲に留めています)。

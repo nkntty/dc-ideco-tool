@@ -190,6 +190,16 @@ function showResult() {
       </ul>
       <span class="retry-link" id="retry-btn">もう一度診断する</span>
     </div>
+
+    <div class="chat-box">
+      <h3>気になることをAIに聞いてみる</h3>
+      <div id="chat-log" class="chat-log"></div>
+      <form id="chat-form" class="chat-form">
+        <input type="text" id="chat-input" placeholder="例:今からでも間に合いますか?" maxlength="200" required>
+        <button type="submit" class="cta chat-send">送信</button>
+      </form>
+      <p class="chat-note">AIによる一般的な回答です。個別の判断は国民年金基金連合会など公的機関にご確認ください。</p>
+    </div>
   `;
 
   document.getElementById("retry-btn").addEventListener("click", () => {
@@ -197,7 +207,60 @@ function showResult() {
     startBtn.scrollIntoView({ behavior: "smooth" });
   });
 
+  setupChat();
+
   resultSection.scrollIntoView({ behavior: "smooth" });
+}
+
+// ------------------------------------------------------------
+// AIチャット(診断結果画面から/api/chatを呼び出す)
+// ------------------------------------------------------------
+function setupChat() {
+  const chatForm = document.getElementById("chat-form");
+  const chatInput = document.getElementById("chat-input");
+  const chatLog = document.getElementById("chat-log");
+
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const message = chatInput.value.trim();
+    if (!message) return;
+
+    appendChatBubble(chatLog, "user", message);
+    chatInput.value = "";
+    chatInput.disabled = true;
+
+    const loadingBubble = appendChatBubble(chatLog, "assistant", "考え中…");
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.reply) {
+        loadingBubble.textContent = data.reply;
+      } else {
+        loadingBubble.textContent =
+          "回答の取得に失敗しました。時間をおいて再度お試しください。";
+      }
+    } catch (err) {
+      loadingBubble.textContent = "通信エラーが発生しました。";
+    } finally {
+      chatInput.disabled = false;
+      chatInput.focus();
+    }
+  });
+}
+
+function appendChatBubble(container, role, text) {
+  const bubble = document.createElement("div");
+  bubble.className = `chat-bubble chat-bubble-${role}`;
+  bubble.textContent = text;
+  container.appendChild(bubble);
+  container.scrollTop = container.scrollHeight;
+  return bubble;
 }
 
 // ------------------------------------------------------------
